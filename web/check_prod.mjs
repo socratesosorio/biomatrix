@@ -1,0 +1,12 @@
+import { chromium } from "playwright";
+const b = await chromium.launch({ headless:true, channel:"chrome", args:["--use-gl=angle","--use-angle=swiftshader","--ignore-gpu-blocklist"]});
+const p = await b.newPage({ viewport:{width:1200,height:760}});
+const errs=[]; p.on("pageerror",e=>errs.push(e.message)); p.on("console",m=>{if(m.type()==="error")errs.push(m.text());});
+await p.goto("http://127.0.0.1:8055/",{waitUntil:"networkidle"});
+await p.waitForSelector(".conn.ok",{timeout:10000});
+await p.waitForTimeout(3000);
+const conn=await p.evaluate(()=>document.querySelector(".conn")?.textContent);
+const frac=await p.evaluate(()=>document.querySelector(".op-readout span")?.textContent);
+await p.screenshot({path:"/tmp/prod_tissue.png"});
+console.log("CONN:",conn,"| FRAC:",frac,"| ERRORS:",errs.filter(e=>!e.includes("favicon")).length?JSON.stringify(errs):"none(except favicon)");
+await b.close();
