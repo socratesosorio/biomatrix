@@ -1,7 +1,7 @@
 import { useStore, Params, Scene } from "../state";
 import {
   sendParams, sendPlay, sendPause, sendReset, sendSpawn, sendSplit,
-  sendPreset, sendSpeed, sendSweep,
+  sendPreset, sendSpeed, sendSweep, sendReleaseVirus,
 } from "../net/ws";
 
 interface SliderDef {
@@ -18,6 +18,8 @@ const SLIDERS: SliderDef[] = [
   { key: "immune", label: "Immune", min: 0, max: 0.5, step: 0.005, hero: true },
   { key: "mutation", label: "Mutation", min: 0, max: 0.01, step: 0.0002 },
   { key: "o_source", label: "Oxygen supply", min: 0.01, max: 0.08, step: 0.001 },
+  { key: "infectivity", label: "Infectivity", min: 0, max: 1, step: 0.005 },
+  { key: "latent_period", label: "Latent period", min: 1, max: 20, step: 1 },
 ];
 
 // mirror engine/params.py presets so the sliders track loaded presets
@@ -128,6 +130,12 @@ export default function Controls() {
           onClick={() => { const v = !split; setSplit(v); sendSplit(v); }}
         >
           Split seeds
+        </button>
+        <button
+          className="virus-btn"
+          onClick={() => sendReleaseVirus(Math.floor(grid / 2), Math.floor(grid / 2), 5)}
+        >
+          Release virus
         </button>
       </div>
 

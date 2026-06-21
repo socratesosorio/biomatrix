@@ -37,6 +37,9 @@ const vec3 C_HEALTHY2= vec3(0.42, 0.30, 0.42);
 const vec3 C_TUMOR   = vec3(0.95, 0.10, 0.45);
 const vec3 C_TUMOR2  = vec3(1.00, 0.45, 0.10);
 const vec3 C_NECRO   = vec3(0.18, 0.12, 0.08);
+const vec3 C_EXPOSED = vec3(0.92, 0.88, 0.45);   // pale yellow
+const vec3 C_INFECT  = vec3(1.00, 0.50, 0.05);   // bright orange
+const vec3 C_VDEAD   = vec3(0.40, 0.40, 0.42);   // grey
 
 float hash(vec2 p) {
   p = fract(p * vec2(123.34, 456.21));
@@ -81,8 +84,14 @@ void main() {
     col = mix(C_HEALTHY, C_HEALTHY2, jitter * 0.6);
   } else if (s == 2u) {
     col = mix(C_TUMOR, C_TUMOR2, 0.3 + 0.5 * jitter);
-  } else {
+  } else if (s == 3u) {
     col = C_NECRO * (0.7 + 0.5 * jitter);
+  } else if (s == 4u) {
+    col = mix(C_EXPOSED, C_HEALTHY, 0.45);        // EXPOSED: faintly yellow tissue
+  } else if (s == 5u) {
+    col = mix(C_INFECT, vec3(1.0, 0.8, 0.2), 0.3 * jitter);  // INFECTIOUS
+  } else {
+    col = C_VDEAD * (0.8 + 0.4 * jitter);         // VIRAL_DEAD
   }
 
   // oxygen underlay: low O reads as darker / bruised

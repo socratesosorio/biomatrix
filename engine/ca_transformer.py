@@ -24,7 +24,10 @@ import numpy as np
 import torch
 import torch.nn.functional as F
 
-from engine.params import CAParams, EMPTY, HEALTHY, TUMOR, NECROTIC
+from engine.params import (
+    CAParams, EMPTY, HEALTHY, TUMOR, NECROTIC,
+    EXPOSED, INFECTIOUS, VIRAL_DEAD, NUM_STATES,
+)
 
 
 def pick_device() -> torch.device:
@@ -46,9 +49,9 @@ SELF_TOKEN = 4
 
 
 def _onehot_states(state: torch.Tensor) -> torch.Tensor:
-    """[B,H,W] uint8 -> [B,4,H,W] float one-hot of the 4 states."""
+    """[B,H,W] uint8 -> [B,NUM_STATES,H,W] float one-hot."""
     B, H, W = state.shape
-    oh = torch.zeros((B, 4, H, W), dtype=torch.float32, device=state.device)
+    oh = torch.zeros((B, NUM_STATES, H, W), dtype=torch.float32, device=state.device)
     oh.scatter_(1, state.long().unsqueeze(1), 1.0)
     return oh
 
@@ -106,12 +109,13 @@ class NeighborhoodAttention:
         # uniform attention over 9 tokens == mean (softmax of zero logits)
         attn = torch.full((toks.shape[0], 9) + toks.shape[3:], 1.0 / 9.0,
                           device=toks.device)               # [B,9,H,W]
-        out = (toks * attn.unsqueeze(2)).sum(dim=1)         # [B,5,H,W] = mean over 9
+        out = (toks * attn.unsqueeze(2)).sum(dim=1)         # mean over 9
         sum9 = out * 9.0
         # neighbor counts (8-neighborhood) = sum over 9 - self
-        n_counts = sum9[:, 0:4] - onehot                    # [B,4,H,W]
+        ns = onehot.shape[1]
+        n_counts = sum9[:, 0:ns] - onehot                   # [B,ns,H,W]
         o_self = oxygen
-        o_sum9 = sum9[:, 4:5]
+        o_sum9 = sum9[:, ns:ns + 1]
         o_lap = o_sum9 - 9.0 * o_self                       # laplacian8 (edge padded)
         o_neigh_mean = (o_sum9 - o_self) / 8.0
         return n_counts, o_lap, o_neigh_mean
@@ -123,13 +127,21 @@ class NeighborhoodAttention:
         attention head in the forward pass.
         """
         feat = torch.cat([onehot, oxygen], dim=1)           # [B,5,H,W]
-        toks = _gather_neighborhood(feat)                   # [B,9,5,H,W]
+        toks = _gather_neighborhood(feat)                   # [B,9,C,H,W]
+        ns = onehot.shape[1]
         state_part = toks[:, :, 0:4]                        # [B,9,4,H,W]
-        ox_part = toks[:, :, 4]                             # [B,9,H,W]
+        ox_part = toks[:, :, ns]                            # [B,9,H,W] (oxygen channel)
         score = torch.einsum("bnchw,c->bnhw", state_part, self.k_state_weight)
         score = score + self.k_oxygen_weight * ox_part
         attn = torch.softmax(score / self.temperature, dim=1)  # [B,9,H,W]
         return attn
+
+    def scalar_laplacian(self, field: torch.Tensor) -> torch.Tensor:
+        """8-neighbor laplacian of a scalar field [B,1,H,W] via the same
+        neighborhood gather (replicate pad). Reused for viral-load diffusion."""
+        toks = _gather_neighborhood(field, pad_mode="replicate")  # [B,9,1,H,W]
+        sum9 = toks.sum(dim=1)                                     # [B,1,H,W]
+        return sum9 - 9.0 * field
 
 
 class TissueTransformer:
@@ -175,6 +187,9 @@ class TissueTransformer:
             oxys.append(np.ones((H, W), dtype=np.float32))
         self.state = torch.from_numpy(np.stack(states)).to(self.device)
         self.oxygen = torch.from_numpy(np.stack(oxys)).to(self.device)
+        # virus fields (additive)
+        self.viral = torch.zeros((B, H, W), dtype=torch.float32, device=self.device)
+        self.latent_timer = torch.zeros((B, H, W), dtype=torch.uint8, device=self.device)
         self.tick = 0
 
     def set_batch(self, B: int, seed: int = 0):
@@ -192,6 +207,22 @@ class TissueTransformer:
             self.state[:, disc] = TUMOR
         else:
             self.state[b, disc] = TUMOR
+
+    def release_virus(self, x: int, y: int, radius: int = 4, b: int | None = None):
+        H, W = self.H, self.W
+        yy, xx = torch.meshgrid(
+            torch.arange(H, device=self.device),
+            torch.arange(W, device=self.device),
+            indexing="ij",
+        )
+        disc = (yy - y) ** 2 + (xx - x) ** 2 <= radius**2
+        burst = int(self.params.burst_period)
+        if b is None:
+            self.state[:, disc] = INFECTIOUS
+            self.latent_timer[:, disc] = burst
+        else:
+            self.state[b, disc] = INFECTIOUS
+            self.latent_timer[b, disc] = burst
 
     # ---- the forward pass ----
     @torch.no_grad()
@@ -249,6 +280,49 @@ class TissueTransformer:
 
         # NECROTIC persists.
 
+        # === VIRUS AGENT (additive; cancer rules above are untouched) ===
+        # cancer rules never match states 4/5/6, so EXPOSED/INFECTIOUS/VIRAL_DEAD
+        # cells are carried through unchanged in `nxt`.
+        n_infectious = n_counts[:, INFECTIOUS]
+        # viral-load field: same laplacian diffusion as oxygen + decay + emission
+        viral_lap = self.attn.scalar_laplacian(self.viral.unsqueeze(1))[:, 0]
+        emit = (state == INFECTIOUS).float() * p.viral_emit
+        viral_next = torch.clamp(
+            self.viral + p.viral_diff * viral_lap - p.viral_decay * self.viral + emit,
+            0.0, 4.0,
+        )
+
+        r2 = torch.rand(state.shape, generator=self._gen).to(self.device)
+        timer = self.latent_timer.clone()
+
+        # HEALTHY -> EXPOSED  (only cells still healthy after the cancer rules)
+        healthy_still = (state == HEALTHY) & (nxt == HEALTHY)
+        p_infect = torch.clamp(
+            p.infectivity * (n_infectious / 8.0 + self.viral), 0.0, 1.0
+        )
+        new_exposed = healthy_still & (r2 < p_infect)
+        nxt[new_exposed] = EXPOSED
+        timer[new_exposed] = int(p.latent_period)
+
+        # EXPOSED -> (decrement timer) -> INFECTIOUS at 0
+        exposed = state == EXPOSED
+        dec_e = exposed & (timer > 0)
+        timer[dec_e] = timer[dec_e] - 1
+        became_inf = exposed & (timer == 0)
+        nxt[became_inf] = INFECTIOUS
+        timer[became_inf] = int(p.burst_period)
+
+        # INFECTIOUS -> (decrement burst timer) -> VIRAL_DEAD at 0
+        infectious = state == INFECTIOUS
+        dec_i = infectious & (timer > 0)
+        timer[dec_i] = timer[dec_i] - 1
+        died = infectious & (timer == 0)
+        nxt[died] = VIRAL_DEAD
+        # VIRAL_DEAD persists (carried through nxt).
+
+        self.viral = viral_next
+        self.latent_timer = timer
+
         self.state = nxt
         self.oxygen = o_next
         self.tick += 1
@@ -263,6 +337,11 @@ class TissueTransformer:
     def necrotic_fraction(self) -> list[float]:
         s = self.state
         frac = (s == NECROTIC).float().mean(dim=(1, 2))
+        return frac.cpu().tolist()
+
+    def infected_fraction(self) -> list[float]:
+        s = self.state
+        frac = ((s == EXPOSED) | (s == INFECTIOUS) | (s == VIRAL_DEAD)).float().mean(dim=(1, 2))
         return frac.cpu().tolist()
 
     def focus_attention(self, x: int, y: int, b: int = 0):

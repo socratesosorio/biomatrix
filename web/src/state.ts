@@ -6,6 +6,8 @@ export interface Params {
   mutation: number;
   o_source: number;
   speed: number;
+  infectivity: number;
+  latent_period: number;
 }
 
 export interface SweepResult {
@@ -50,6 +52,7 @@ interface StatsBuffer {
   // per-batch ring buffers of tumor_fraction
   series: number[][];
   necrotic: number[][];
+  infected: number[][];
   push: (tumor: number[], necrotic: number[]) => void;
 }
 
@@ -77,7 +80,7 @@ interface Store {
   setFocusCell: (c: { x: number; y: number } | null) => void;
   setSweep: (s: SweepResult | null) => void;
   setSweepRunning: (v: boolean) => void;
-  pushStats: (tumor: number[], necrotic: number[]) => void;
+  pushStats: (tumor: number[], necrotic: number[], infected?: number[]) => void;
 }
 
 const DEFAULT_PARAMS: Params = {
@@ -86,6 +89,8 @@ const DEFAULT_PARAMS: Params = {
   mutation: 0.0008,
   o_source: 0.042,
   speed: 30,
+  infectivity: 0.28,
+  latent_period: 6,
 };
 
 export const useStore = create<Store>((set, get) => ({
@@ -103,6 +108,7 @@ export const useStore = create<Store>((set, get) => ({
   stats: {
     series: [[]],
     necrotic: [[]],
+    infected: [[]],
     push() {},
   },
 
@@ -117,21 +123,25 @@ export const useStore = create<Store>((set, get) => ({
   setFocusCell: (c) => set({ focusCell: c }),
   setSweep: (s) => set({ sweep: s }),
   setSweepRunning: (v) => set({ sweepRunning: v }),
-  pushStats: (tumor, necrotic) => {
+  pushStats: (tumor, necrotic, infected) => {
     const st = get().stats;
     const series = st.series.slice();
     const nec = st.necrotic.slice();
+    const inf = st.infected.slice();
     for (let b = 0; b < tumor.length; b++) {
       if (!series[b]) series[b] = [];
       if (!nec[b]) nec[b] = [];
+      if (!inf[b]) inf[b] = [];
       series[b] = series[b].concat(tumor[b]).slice(-MAX_HISTORY);
       nec[b] = nec[b].concat(necrotic[b]).slice(-MAX_HISTORY);
+      inf[b] = inf[b].concat(infected ? infected[b] : 0).slice(-MAX_HISTORY);
     }
     // trim batches if fewer now
     series.length = tumor.length;
     nec.length = necrotic.length;
+    inf.length = tumor.length;
     set({
-      stats: { series, necrotic: nec, push() {} },
+      stats: { series, necrotic: nec, infected: inf, push() {} },
       lastTumorFraction: tumor,
     });
   },

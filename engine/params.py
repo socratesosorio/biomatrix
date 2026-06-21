@@ -18,8 +18,17 @@ EMPTY = 0
 HEALTHY = 1
 TUMOR = 2
 NECROTIC = 3
+# --- virus agent states (additive) ---
+EXPOSED = 4
+INFECTIOUS = 5
+VIRAL_DEAD = 6
 
-STATE_NAMES = {EMPTY: "EMPTY", HEALTHY: "HEALTHY", TUMOR: "TUMOR", NECROTIC: "NECROTIC"}
+NUM_STATES = 7
+
+STATE_NAMES = {
+    EMPTY: "EMPTY", HEALTHY: "HEALTHY", TUMOR: "TUMOR", NECROTIC: "NECROTIC",
+    EXPOSED: "EXPOSED", INFECTIOUS: "INFECTIOUS", VIRAL_DEAD: "VIRAL_DEAD",
+}
 
 
 @dataclass
@@ -42,6 +51,14 @@ class CAParams:
     p_regrow: float = 0.06     # contact-inhibited regrowth of HEALTHY into EMPTY
     inhib: int = 6             # crowding >= inhib blocks regrowth
     p_invade: float = 0.55     # base rate tumor invades adjacent HEALTHY (scaled by aggression)
+
+    # --- virus agent (additive; does not affect cancer rules) ---
+    infectivity: float = 0.28   # HEALTHY->EXPOSED scale (n_infectious/8 + viral_load)
+    latent_period: int = 6      # ticks EXPOSED before turning INFECTIOUS
+    viral_diff: float = 0.16    # viral-load diffusion (same laplacian as oxygen)
+    viral_decay: float = 0.08   # viral-load decay per tick
+    viral_emit: float = 0.6     # viral-load emitted by each INFECTIOUS cell per tick
+    burst_period: int = 10      # ticks INFECTIOUS before VIRAL_DEAD
 
     # --- runtime / engine ---
     speed: int = 30            # ticks per second target

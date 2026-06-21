@@ -7,136 +7,183 @@
 
 ## How to read this script
 
-- **SAY** = speak this, roughly verbatim (≈150 words/min → the whole thing is ~5 min with the pauses built in).
+- **SAY** = speak this, roughly verbatim (≈150 words/min → the spoken parts total ~5 min with the pauses built in).
 - **SHOW** = exactly what to do on screen at that moment.
-- **Recording tips** are in *italics*.
+- **CLAIM** tags map each beat to the persuasive argument it's landing.
+- *Recording tips are in italics.*
 
 > **Pre-flight (do this BEFORE you hit record):**
 > 1. Open the URL, wait for the badge to read **`live · cuda`** (top-right).
-> 2. Click **Map** once to run the phase sweep, let it finish (~8 s), then click back to **Tissue**. This *caches* the phase map so it appears instantly later in the video. (You'll re-trigger it live in Act 5 for the "watch it compute" beat — your call which feels better.)
-> 3. Click the **Body** scene so you open on the silhouette.
-> 4. Click **Bloom** preset, then **Reset**, then **Pause** — so the hero tumor is primed but frozen at t=0. Switch back to **Body** to start.
+> 2. Click **Map** once to run the phase sweep, let it finish (~8 s), then click back to **Tissue** — this *caches* the phase map so it's instant later. (You'll re-trigger it live in Act 6 for the "watch it compute" beat.)
+> 3. Click **Bloom** preset → **Reset** → **Pause**, so the hero tumor is primed but frozen at t=0.
+> 4. Click the **Body** scene so you open on the silhouette.
+>
+> *Two new controls exist now: the **Infectivity** + **Latent period** sliders and the **Release virus** button. The chart draws two lines — pink = tumor, orange = infected.*
 
 ---
 
-## ACT 1 — The Hook (0:00–0:30)
+## ACT 1 — The Hook (0:00–0:35) · CLAIM #1 (the keystone)
 
-**SHOW:** Open on the **Body** scene — human silhouette, glowing tumor site pulsing at the chest.
-
-**SAY:**
-> "This is a human body with a tumor. I'm going to dive into the tissue, and everything you're about to see is a transformer running live on an H100 — not a video, not a pre-render. Every frame is being computed right now and streamed to my browser."
-
-**SHOW:** Click **Tissue**. The camera dives from the body into the live cellular grid (single eased crossfade).
+**SHOW:** Open on **Body** — human silhouette, glowing tumor site pulsing at the chest.
 
 **SAY:**
-> "Here's the core idea: in real tissue, cells decide what to do by sensing their neighbors. That's *attention*. So I built the simulation as a transformer — every timestep is one forward pass: neighborhood attention, then an MLP that picks each cell's next state."
+> "This is a human body with a tumor. I'm going to dive into the living tissue — and everything you're about to see is a transformer, running live on an H100 right now. Not a video. Not a pre-render."
+
+**SHOW:** Click **Tissue**. Camera dives from the body into the live cellular grid.
+
+**SAY:**
+> "Here's the one idea this whole thing rests on. In real tissue, a cell decides what to do by weighing signals from its neighbors. That *is* attention — the exact same operation: a set of entities, each updating by weighted aggregation over its neighbors. Biology has been running attention for a billion years; we just recognized the shape and wrote the dynamics in it. So every timestep here is a transformer forward pass — which means this runs *native* on a transformer ASIC."
 
 ---
 
-## ACT 2 — What You're Looking At (0:30–1:20)
+## ACT 2 — What You're Looking At (0:35–1:15)
 
-**SHOW:** You're in **Tissue** scene. Click **Play** if paused. Click **Bloom** preset. A tumor blooms outward from center; teal healthy tissue, magenta tumor, a dark necrotic core forming. Point to the chart bottom-left.
-
-**SAY:**
-> "Teal is healthy tissue. Magenta is tumor. As the tumor gets dense, it burns through oxygen faster than the blood can resupply it — so the center goes hypoxic and dies. That brown core is necrosis. That dead-center, active-rim shape is exactly how real tumors look, and it falls out of the physics, not a texture."
-
-**SHOW:** Tap the order-parameter chart (bottom-left line graph).
+**SHOW:** In **Tissue**, click **Play**, then **Bloom** preset. A tumor blooms; teal healthy tissue, magenta tumor, a dark necrotic core forming. Point to the chart bottom-left.
 
 **SAY:**
-> "This line is the order parameter — the fraction of the tissue that's cancer. It's the one number that tells us which regime we're in. Watch what it does when I touch one slider."
+> "Teal is healthy tissue, magenta is tumor. As the tumor packs in, it burns oxygen faster than the blood resupplies it, so the core goes hypoxic and dies — that brown center is necrosis. That dead-core, living-rim shape is how real tumors look, and it falls out of the physics, not a texture. And this line is the order parameter: the fraction of tissue that's cancer. One number that tells us which world we're in."
 
 ---
 
-## ACT 3 — The f Core (1:20–2:30) ⭐ *most important 60 seconds*
+## ACT 3 — The Falsifiable Core (1:15–2:10) ⭐ *most important 60 seconds*
 
-**SHOW:** Click **Homeostasis** preset. Tissue settles back to almost all teal; the order-parameter line drops toward zero.
-
-**SAY:**
-> "Right now aggression is low and the immune response is high. The immune system plus contact inhibition hold the line — the tumor can't get going. This is homeostasis. The cancer fraction sits near zero."
-
-**SHOW:** Grab the **Aggression ★** slider and *slowly* drag it right, from ~0.20 up through ~0.40. Pause right around 0.35.
+**SHOW:** Click **Homeostasis** preset. Tissue settles to almost all teal; the order-parameter line drops toward zero.
 
 **SAY:**
-> "Now I'll turn up aggression — how hard tumor cells push to proliferate and invade. Nothing… nothing… and then —"
+> "Right now aggression is low, immunity is high. The immune system plus contact inhibition hold the line — cancer can't get going. This is homeostasis."
 
-**SHOW:** As you cross ~0.35, the tissue visibly flips to runaway magenta; the order-parameter line spikes upward.
-
-**SAY:**
-> "— there. That's a phase transition. A sharp critical threshold. Below it, the tumor goes extinct every time. Above it, it explodes every time. And I can drive it backward —"
-
-**SHOW:** Drag **Aggression** back down below 0.30. The tumor gets suppressed again; the line falls.
+**SHOW:** Grab **Aggression ★** and *slowly* drag right from ~0.20 toward ~0.40. Pause around 0.35.
 
 **SAY:**
-> "— back to healthy. This is the whole point: it's not a pretty animation, it's a f model. There's a real critical point, and you can feel it with your hand."
+> "Now I turn up aggression — how hard tumor cells push to proliferate and invade. Nothing… nothing… and then —"
+
+**SHOW:** Crossing ~0.35, the tissue flips to runaway magenta; the order-parameter line spikes.
+
+**SAY:**
+> "— there. A phase transition. A sharp critical threshold: below it the tumor goes extinct every time, above it it explodes every time. And I can drive it back —"
+
+**SHOW:** Drag **Aggression** back below 0.30; the tumor is suppressed, the line falls.
+
+**SAY:**
+> "This isn't a pretty animation. It's a falsifiable model — a real critical point you can feel with your hand."
 
 ---
 
-## ACT 4 — Chaos, Shown Rigorously (2:30–3:10)
+## ACT 4 — The Virus, and Why Emergence Is the Product (2:10–3:10) · CLAIMS #3 + #4
 
-**SHOW:** Click **Near-critical** preset, then click **Split seeds**. The view splits into two tissues side by side. The chart now draws two lines.
-
-**SAY:**
-> "Right at the critical point, the outcome is decided by chance. Here are two tissues with *identical* parameters — same aggression, same immune response — started from different random seeds."
-
-**SHOW:** Let it run ~8–10 seconds so the two panels diverge (one stays mostly healthy, one runs away). Point at the two diverging chart lines.
+**SHOW:** Click **Homeostasis** (calm canvas), then click **Release virus**. A bright-orange infection front blooms from center; behind it a grey dead core; the **orange line** on the chart climbs. *Optionally nudge the **Infectivity** slider up.*
 
 **SAY:**
-> "Same rules, same settings — and one stays healthy while the other becomes cancer. That's deterministic chaos near a tipping point, and because every cell samples its next state from the transformer's output, it's baked right into the model."
+> "Now watch me drop a completely different agent into the *same* tissue — a virus. Healthy cells get exposed, turn infectious, shed virus to their neighbors, and die. Orange is infectious, grey is killed."
+
+**SHOW:** Point at the pale-yellow ring just ahead of the orange front.
+
+**SAY:**
+> "And here's the point of the whole project. We didn't *discover* cancer, and we didn't discover viruses — the local rules are simple and known. The product is what they do that you cannot reason out by hand. Look: the virus's most dangerous property — this silent spread — comes from the latent period. Those cells are already infected but still look healthy. We never coded 'silent spread.' It's emergent. The bottleneck in biology was never knowing the local rules. It's the compute to explore what they imply."
+
+**SHOW:** Gesture between the tumor and the virus.
+
+**SAY:** *(CLAIM #4 — the platform line)*
+> "And cancer and this virus run on the *same* engine — zero changes. Encode the substrate once, and the agents are swappable: a drug, a gene knockout, a second pathogen — the consequences come for free."
+
+**SHOW:** *(optional, ~15 s if you have the time)* Leave both agents running so the magenta tumor, the brown hypoxic necrosis, and the grey viral death overlap in the same region. Point at the muddied middle.
+
+**SAY:** *(the confounding insight — CLAIM #3, sharpened)*
+> "And watch what happens when they overlap. Now I've got two ways for a cell to die — the tumor starving it of oxygen, and the virus killing it — in the same patch of tissue. Just looking, you *cannot* tell which agent did what; the signatures mask each other. Stack a second pathogen on top and it's hopeless by eye. The only way to attribute cause is to run the counterfactuals — tumor alone, virus alone, both — and diff them. That's not a visualization problem you can squint your way out of; it's a *compute* problem. Disentangling interacting diseases is exactly the thing you can only do by running it, in parallel, many times."
 
 ---
 
-## ACT 5 — The Etched Kill Shot (3:10–4:00)
+## ACT 5 — The Etched Kill Shot (3:10–3:50) · CLAIM #1 proven
 
-**SHOW:** Turn off **Split seeds**. Click **Cell** scene. The camera zooms way in; cells become big and gooey. Click on one cell — cyan attention edges fan out from it to its neighbors, with a yellow focused node and flowing dashed lines.
-
-**SAY:**
-> "Let me zoom all the way into a single cell. These glowing edges are the actual attention weights for this cell — how much it's 'listening' to each neighbor this timestep. This is the literal claim made visual: cell-to-cell signaling *is* attention. A timestep *is* a transformer forward pass."
-
-**SHOW:** Let the attention edges pulse for a beat.
+**SHOW:** Click **Cell** scene. Camera zooms into individual cells (big, gooey). Click one cell — cyan attention edges fan to its neighbors, yellow focused node, flowing dashes.
 
 **SAY:**
-> "Which means this entire simulation — all of this biology — runs natively on the one primitive a transformer ASIC accelerates. On Etched's hardware, a forward pass is nearly free. So a timestep is nearly free."
+> "Let me prove claim one isn't a metaphor. These glowing edges are the actual attention weights for this single cell — how much it's weighing each neighbor, this timestep. That's not 'like' attention. It *is* attention, computing 'what is my neighborhood.' Which is exactly why this entire simulation runs on the one primitive a transformer chip accelerates. On Etched's hardware a forward pass is nearly free — so a timestep is nearly free."
 
 ---
 
-## ACT 6 — Compute As Free (4:00–4:40)
+## ACT 6 — Compute as Instrument, and Why You Need the Ensemble (3:50–4:35) · CLAIMS #2 + #6
 
-**SHOW:** Click **Map** (or hit **Run phase sweep**). If running live, the "thousands of forward passes in parallel" spinner shows for ~8 s, then the viridis phase diagram appears — purple bottom-left (homeostasis), bright yellow top-right (cancer), a clean diagonal critical boundary.
+**SHOW:** Click **Map** (or **Run phase sweep**). The viridis phase diagram appears — purple homeostasis, bright-yellow cancer, a clean diagonal critical boundary.
 
-**SAY:**
-> "And here's what 'free compute' buys you. This phase map is 2,304 *separate* simulations — every combination of aggression and immune strength — all run in parallel on the H100 as one big batched forward pass. Each pixel is a full tissue. Bright means cancer wins."
+**SAY:** *(CLAIM #2 — make the Etched founders feel seen)*
+> "And this is the part for the hardware people. A simulation has no gradients — it's pure inference, forever. So a chip built for inference throughput isn't a model server; it's a scientific instrument. This map is over two thousand separate tissues, every combination of aggression and immunity, run in parallel as *one* batched forward pass on the H100. That's what inference-time compute actually means — running the world forward, millions of times."
 
-**SHOW:** Click a pixel near the boundary. The app loads that regime and animates back to the live tissue.
+**SHOW:** Switch on **Split seeds** (two tissues, identical params, near-critical). Let them diverge — one healthy, one cancer. Point at the two chart lines.
 
-**SAY:**
-> "I can click any point on this map and drop straight into that regime. At scale, you don't drag a slider — you search this entire space for the intervention that collapses the tumor, before you ever touch a patient."
+**SAY:** *(CLAIM #6 — the rigorous reason for parallel compute)*
+> "And here's why you *need* that parallelism. Near the critical line, a single run lies. Same parameters, two seeds — one goes extinct, one explodes, and a tiny fluctuation decided it. So where it matters most, you can't trust one simulation. You need the ensemble — thousands of parallel runs to get the distribution. That's the scientific argument for near-infinite parallel compute."
 
 ---
 
-## ACT 7 — The Close (4:40–5:00)
+## ACT 7 — The Trajectory & The Close (4:35–5:00) · CLAIM #5 + thesis
 
-**SHOW:** Pull back to **Tissue** or **Body**; let the hero tumor breathe.
+**SHOW:** Click a pixel on the **Map** (if still up) or pull back to **Tissue**; let the hero tumor breathe.
 
-**SAY:**
-> "So: cell signaling is attention, a timestep is a forward pass, and the whole thing runs on transformer silicon. The engine is on an H100 right now, streaming state to this browser over a WebSocket — the browser only paints. Near-zero-latency forward passes turn a wet-lab cycle into a parallel search. That's biology, rebuilt as inference. Thanks."
+**SAY:** *(CLAIM #5 — the foundation-model trajectory)*
+> "Today I hand-set these rules — which makes them interpretable; I can point at the oxygen head, the crowding head. Newton handed Mujoco its physics. Biology won't hand us its interaction weights — so you learn them, from perturb-seq, CRISPR screens, microscopy. A transformer runs fast on the chip *and* is trainable from that data. A CUDA kernel does neither. More compute, simulate more, generate more data, learn a better engine — a foundation model of cell dynamics."
 
-*Hard cut on the phase map or the blooming tumor.*
+**SAY:** *(the one line that lands it all — slow down here)*
+> "Cell signaling is attention, so simulating biology is running forward passes — which turns a transformer chip into an instrument for running the world forward, in parallel, to discover the things we can't predict by hand. Thanks."
+
+*Hard cut on the phase map or the blooming tissue.*
 
 ---
 
 ## Shot list (quick reference)
 
-| Time | Scene/Action | The line that matters |
-|---|---|---|
-| 0:00 | **Body** → dive to **Tissue** | "a transformer running live on an H100" |
-| 0:30 | **Bloom** preset, point at necrotic core + chart | "that shape falls out of the physics" |
-| 1:20 | **Homeostasis** → drag **Aggression** up past 0.35 → back down | "that's a phase transition… f" |
-| 2:30 | **Near-critical** + **Split seeds** | "same rules, one healthy, one cancer" |
-| 3:10 | **Cell** scene, click a cell | "signaling *is* attention" |
-| 4:00 | **Map** / **Run phase sweep**, click a pixel | "2,304 simulations in parallel… search for the cure" |
-| 4:40 | back to Tissue/Body | "biology, rebuilt as inference" |
+| Time | Scene / Action | The line that matters | Claim |
+|---|---|---|---|
+| 0:00 | **Body** → dive to **Tissue** | "biology has run attention for a billion years" | #1 |
+| 0:35 | **Bloom**, point at necrotic core + chart | "falls out of the physics, not a texture" | — |
+| 1:15 | **Homeostasis** → drag **Aggression** past 0.35 → back | "a falsifiable model you can feel" | — |
+| 2:10 | **Homeostasis** → **Release virus** | "silent spread is emergent — we never coded it" | #3 |
+| 2:55 | gesture tumor ↔ virus | "same engine, swap the agent" | #4 |
+| 3:05 | *(optional)* let tumor + virus overlap | "two causes of death, you can't tell which — only compute disentangles it" | #3 |
+| 3:10 | **Cell**, click a cell | "it *is* attention — not a metaphor" | #1 |
+| 3:50 | **Map** / **Run phase sweep** | "pure inference → the chip is an instrument" | #2 |
+| 4:10 | **Split seeds** near-critical | "near criticality a single run lies — need the ensemble" | #6 |
+| 4:35 | back to Tissue | "hand-set today, learnable tomorrow" | #5 |
 
-**Total ≈ 5:00.** If you run long, cut Act 4 (Split seeds) — it's the most expendable. Never cut Act 3.
+**Total ≈ 5:00.** If you run long, the most compressible beat is Act 6's Split-seeds half — keep the sweep + Claim #2, trim the ensemble line to one sentence. **Never cut Act 3 or Act 4.**
+
+> **Claim discipline:** you don't have to say all six. The spine is **#1 → #3 → #2 → #6 → #5**, with #4 riding along on the virus reveal. Under probing, the one-line defenses:
+> - **#1:** the neighbor-aggregation head is literally attention computing "what's my neighborhood."
+> - **#3:** silent spread (latent period) is emergent — never coded; you can only get it by running it.
+> - **#4:** cancer and virus share the engine with zero changes — encode substrate once, agents swap.
+> - **#2:** no gradients anywhere — it's inference forever, so the chip is an instrument, not a server.
+> - **#6:** two seeds, identical params, diverge at criticality → you need the distribution, not one run.
+> - **#5:** hand-set = interpretable now; learnable from perturbation data later; transformer does both, a CUDA kernel does neither.
+
+---
+
+## Anticipated questions & answers (for live Q&A)
+
+Each answer routes to the claim that wins it. Keep them to 2–3 sentences out loud.
+
+**Q: "Don't we already understand cancer? You hard-coded rules you already knew."** → *CLAIM #3*
+> "The rules are known and simple — that's the point, not the weakness. The product isn't the rules; it's the *emergence*, and emergence is unknowable by reasoning. Nobody can intuit what virus × tumor does in shared tissue, or that a latent period produces silent spread — we never coded 'silent spread,' it fell out. The bottleneck in biology was never knowing the local rules; it's the compute to explore what they imply."
+
+**Q: "When you add multiple diseases, how do you even know what's happening? Doesn't it just become noise?"** → *CLAIM #3 + #6*
+> "Exactly — that's the hard part, and it's why this needs compute. When the tumor and the virus overlap, two different causes of death sit in the same tissue and their signatures mask each other; by eye you genuinely cannot attribute which agent did what, and a third pathogen makes it hopeless. The only way to disentangle interacting diseases is to run the counterfactuals — each agent alone, then together — and diff them, many times over. Confounding isn't a visualization problem; it's a parallel-compute problem."
+
+**Q: "Isn't this just a cellular automaton with a transformer logo slapped on?"** → *CLAIM #1*
+> "No — the neighbor-aggregation step *is* softmax attention; I can show you the head computing 'what is my neighborhood' as weighted aggregation over the 3×3 window. A CA and a transformer layer are the same operation here: entities updating by weighted aggregation over neighbors. That's not branding; it's why a timestep is a forward pass and why it runs native on a transformer ASIC."
+
+**Q: "Why a transformer chip instead of a CUDA kernel? A kernel would be faster."** → *CLAIM #5 (+ #2)*
+> "A CUDA kernel is fast but frozen and unlearnable. Today our weights are hand-set — interpretable, you can point at the oxygen head and the crowding head — but biology won't hand us its true interaction weights the way Newton handed Mujoco its physics. So the frontier is *learning* them from perturbation data: perturb-seq, CRISPR screens, microscopy. A transformer runs fast on the ASIC *and* is trainable from that data. A kernel does neither — it can't become a foundation model of cell dynamics."
+
+**Q: "Why do you need 'near-infinite' parallel compute? Isn't one good simulation enough?"** → *CLAIM #6 (+ #2)*
+> "Near the critical line a single run lies. Two seeds, identical parameters — one tumor goes extinct, one explodes; a tiny fluctuation decides. So exactly where the science is interesting, the system is chaotic and you can't trust one trajectory — you need the *distribution*, thousands of parallel runs. That's the rigorous reason for parallel compute: not bigger, but the ensemble."
+
+**Q: "Why is this the right thing to build on Etched's hardware specifically?"** → *CLAIM #2 (+ #1)*
+> "Everyone assumes compute means training bigger models. But a simulation has no gradients — it's pure inference, forever. So a chip built for inference throughput isn't a model server; it's a scientific instrument for running the world forward, in parallel, millions of times. That's the literal meaning of inference-time compute — and because cell signaling is attention, our 'world' is exactly the workload their silicon accelerates."
+
+**Q: "Is this real biology, or a toy?"** → *CLAIM #5 (own the seam)*
+> "Honestly, today it's a hand-tuned model — and that's a feature: it's interpretable and falsifiable, with a real, reproducible phase transition. The trajectory is to learn the interaction weights from real perturbation data, which closes a flywheel: more compute → simulate more → generate more data → a better engine. The demo is the substrate; the foundation model of cell dynamics is the destination."
+
+**Q: "What did adding the virus actually prove?"** → *CLAIM #4 + #3*
+> "Two things. First, composability: cancer and the virus run on the same engine with zero changes — encode the substrate once and agents are swappable, like Mujoco made physics reusable for robotics. Second, it makes emergence undeniable — the silent latent spread, and the confounding when both diseases overlap, are things we never wrote and can't predict; they only exist when you run it."
 
 ---
 ---
@@ -145,33 +192,34 @@
 
 ## 1. Project title and short description
 
-**Living Tissue — Cancer as a Transformer Forward Pass**
+**Living Tissue — Cancer (and Viruses) as Transformer Forward Passes**
 
-Living Tissue is a real-time tissue simulation in which **every timestep is a literal transformer forward pass**: cells sense their neighbors through 3×3 neighborhood attention, and an MLP samples each cell's next state. A single slider drives a **sharp, reproducible phase transition** — from healthy homeostasis to runaway cancer — across a critical threshold you can feel with your hand. A batched GPU sweep runs **thousands of these simulations in parallel** and renders the full phase diagram of "where cancer wins."
+Living Tissue is a real-time tissue simulator in which **every timestep is a literal transformer forward pass**: each cell updates by weighted aggregation over its 3×3 neighborhood — i.e. neighborhood attention — and an MLP samples its next state. A single slider drives a **sharp, reproducible phase transition** from healthy homeostasis to runaway cancer across a critical threshold you can feel by hand. A second agent — a **virus** (susceptible → exposed → infectious → dead, with a diffusing viral-load field) — drops into the *same* engine with zero changes to the cancer rules, and a batched GPU sweep runs **thousands of full simulations in parallel** to render the phase diagram of "where cancer wins."
 
-**The problem it addresses:** biology is a search problem bottlenecked by the cost of each experiment. We reframe a tissue's dynamics as *inference* on the exact primitive that transformer ASICs (e.g., Etched) accelerate. If a forward pass is effectively free, a timestep is effectively free — so an intractable wet-lab loop (try an intervention, wait, measure) becomes a massively parallel search over parameter space for the intervention that collapses the tumor. The demo is built to be **f, not decorative**: the win condition is a visible, measurable order parameter crossing a real critical point in real time.
+**The problem it solves:** biology's bottleneck is not knowing the local rules — those are often simple and known — it's the **compute to explore what they imply**. Known local rules produce unknowable global behavior (the virus's silent spread is emergent, never coded). And when multiple agents share the tissue — tumor plus virus, or two pathogens — their effects **confound**: distinct causes of death overlap and mask each other, so you cannot attribute cause by inspection. Disentangling them requires running the counterfactuals (each agent alone, then together) and diffing — confounding is not a visualization problem, it is a parallel-compute problem. We reframe a tissue's dynamics as *inference* on the exact primitive transformer ASICs accelerate. If a forward pass is effectively free, a timestep is free, an ensemble of timesteps is free — and an intractable wet-lab loop becomes a massively parallel search for the intervention that collapses the tumor, before you touch a patient. The substrate is encoded once and the agents are swappable, so this is a **platform** (cancer, virus, and next a drug or knockout), not a single demo. The thesis line: *cell signaling is attention, so simulating biology is running forward passes — which turns a transformer chip into an instrument for running the world forward, in parallel, to discover what we can't predict by hand.*
 
 ## 2. Technical explanation
 
 **The model (the engine is genuinely a transformer).**
-- **State:** a grid (192×192 live; 48×48 in the sweep) where each cell is one of `{EMPTY, HEALTHY, TUMOR, NECROTIC}` plus a continuous oxygen field in `[0,1]`. Per-cell feature = one-hot state (4) + oxygen (1).
-- **Neighborhood (windowed) attention:** each timestep gathers every cell's 3×3 neighborhood via an `unfold`/im2col token gather — NAT-style windowed attention, **O(N·9)** instead of O(N²). Two attention heads, both real softmax attention over the 9 tokens:
-  - a **uniform-aggregate head** that computes the exact neighbor type-counts and the oxygen Laplacian (the aggregates the biology needs — verified bit-exact against a NumPy reference);
-  - a **content-based "signaling" head** whose per-neighbor weights vary with neighbor type and oxygen — this is what's drawn as the cell-cell attention overlay.
-  - Head weights are **hand-constructed**, no training required: the heads compute closed-form aggregates, which is the thesis — the local biological rule *is* an attention pattern.
-- **MLP transition:** `[self embedding, neighbor aggregates] → hidden → 4 next-state logits + ΔoxygenΔ`. The next state is **sampled** from the logits.
+- **State:** a grid (192×192 live; 48×48 in the sweep) where each cell is one of `{EMPTY, HEALTHY, TUMOR, NECROTIC, EXPOSED, INFECTIOUS, VIRAL_DEAD}`, plus two continuous fields — oxygen and viral-load — in shared tissue. Per-cell feature = one-hot state + oxygen.
+- **Neighborhood (windowed) attention:** each timestep gathers every cell's 3×3 neighborhood via an `unfold`/im2col token gather — NAT-style windowed attention, **O(N·9)** not O(N²). Two real softmax-attention heads: a **uniform-aggregate head** that computes the exact neighbor type-counts and the oxygen/viral Laplacians (verified bit-exact against a NumPy reference), and a **content-based "signaling" head** whose per-neighbor weights vary with neighbor type/oxygen — drawn as the cell-cell attention overlay. Head weights are **hand-set** (no training): the heads compute closed-form aggregates, which is the thesis — the local biological rule *is* an attention pattern.
+- **MLP transition:** `[self embedding, neighbor aggregates] → hidden → next-state logits + Δoxygen`. The next state is **sampled** from the logits.
+- **Composability:** the virus agent reuses the exact same neighbor-aggregation (infectious-neighbor count) and the same Laplacian machinery (viral-load diffusion clones the oxygen field's), and is **purely additive** — the cancer transition rules are untouched and remain bit-identical.
 
 **Inference-time techniques (the on-theme core).**
-- **Sampling the forward pass:** the stochastic state transition is done by sampling from the MLP's output distribution — exactly LLM-style token sampling. "Inference-time compute = sampling the forward pass."
-- **Batched parallel inference:** the phase sweep stacks `res²` independent simulations into the batch dimension (B = res²) and steps them all in a single batched forward pass — **2,304 full simulations in parallel** on one H100, producing the phase diagram in seconds. This is "near-infinite compute" made literal: parallel search, not iteration.
-- **Multi-GPU sharding (built in):** the sweep auto-shards grid points across every visible CUDA device (`run_auto`), so the same code fans out across an 8×H100 box with no changes.
-- **Verification harness:** because transitions are stochastic, correctness is asserted statistically — the transformer's phase-transition curve overlays the NumPy reference within tolerance (<0.02), proving the transformer faithfully implements the biology.
+- **Sampling the forward pass:** stochastic state transitions sample from the MLP's output distribution — exactly LLM-style token sampling. "Inference-time compute = sampling the forward pass."
+- **Batched parallel inference:** the phase sweep stacks `res²` independent simulations into the batch dimension and steps them all as one batched forward pass — **~2,300 full tissues in parallel** on one H100 → the phase diagram in seconds. Simulation has no gradients; it is **inference forever**, which reframes the inference chip as a scientific instrument.
+- **Ensembles for chaotic regimes:** near the critical threshold a single run is unreliable (two seeds with identical parameters diverge to extinction vs. explosion), so the *distribution* — thousands of parallel runs — is the scientifically correct object. This is the rigorous reason for near-infinite parallel compute.
+- **Multi-GPU sharding (built in):** `run_auto` shards sweep points across every visible CUDA device, so the same code fans out across an 8×H100 box unchanged.
+- **Statistical verification:** because transitions are stochastic, correctness is asserted on statistics — the transformer's phase-transition curve overlays the NumPy reference within tolerance (<0.02), proving it faithfully implements the biology.
 
 **Tools & infrastructure.**
-- **Engine:** Python 3, **PyTorch** (CUDA), NumPy reference implementation. Device auto-selects CUDA → MPS → CPU.
-- **Server:** **FastAPI + Uvicorn** — one async process steps the engine on the GPU and streams state to clients over a **WebSocket**. A compact **binary frame protocol** (little-endian: header + `uint8` state grid + quantized `uint8` oxygen + optional `float16` attention block) keeps the live stream light; JSON is used only for controls and stats.
-- **Frontend:** **React + TypeScript + Vite**, **raw WebGL2** (a single full-screen quad samples an `R8UI` state texture + oxygen texture; a fragment shader does the palette, soft-disc "alive cell" shaping, oxygen underlay, and the continuous body→tissue→cell camera zoom), **zustand** for state, and a `<canvas>` for the live order-parameter chart, attention overlay, and viridis phase map. High-rate grid frames bypass React entirely and feed the GPU directly.
-- **Decoupled sim/render:** the engine runs server-side on the H100; the browser only paints. This is also the honest infra story.
-- **Deployment:** a single FastAPI port serves both the built frontend and the WebSocket, so one public URL runs the whole demo. It's deployed on a **Prime Intellect H100 pod** and exposed publicly via a **Cloudflare tunnel** (`cloudflared`).
+- **Engine:** Python 3, **PyTorch** (CUDA), NumPy reference. Device auto-selects CUDA → MPS → CPU.
+- **Server:** **FastAPI + Uvicorn** — one async process steps the engine on the GPU and streams state over a **WebSocket**. A compact **binary frame protocol** (little-endian header + `uint8` state grid + quantized `uint8` oxygen + optional `float16` attention block) keeps the live stream light; JSON only for controls and stats (tumor + infected fractions).
+- **Frontend:** **React + TypeScript + Vite**, **raw WebGL2** (a single full-screen quad samples an `R8UI` state texture + oxygen texture; a fragment shader does the palette, soft-disc "alive cell" shaping, oxygen underlay, and the continuous body→tissue→cell camera zoom), **zustand** for state, and `<canvas>` for the live order-parameter chart (tumor + infected lines), attention overlay, and viridis phase map. High-rate grid frames bypass React entirely and feed the GPU directly.
+- **Decoupled sim/render:** the engine runs server-side on the H100; the browser only paints — also the honest infra story.
+- **Deployment:** a single FastAPI port serves both the built frontend and the WebSocket, so one public URL runs the whole demo. Deployed on a **Prime Intellect H100 pod** and exposed publicly via a **Cloudflare tunnel** (`cloudflared`).
 
 **One-line architecture:** `WebGL2 browser ⇄ WebSocket ⇄ FastAPI async loop ⇄ batched PyTorch neighborhood-attention transformer on an H100`.
+
+**Future trajectory:** today the interaction weights are hand-set (interpretable — you can point at the oxygen head, the crowding head). The frontier is *learning* them from perturbation data (perturb-seq, CRISPR screens, microscopy): a transformer runs fast on the ASIC **and** is trainable from that data; a CUDA kernel is neither. That closes a flywheel — more compute → simulate more → generate more data → learn a better engine — toward a foundation model of cell dynamics.

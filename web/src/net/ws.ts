@@ -87,7 +87,7 @@ export function connect(url: string) {
         s.setHello(msg.grid, msg.device, msg.params as Params, msg.playing);
         break;
       case "stats":
-        s.pushStats(msg.tumor_fraction, msg.necrotic_fraction);
+        s.pushStats(msg.tumor_fraction, msg.necrotic_fraction, msg.infected_fraction);
         break;
       case "ack":
         if (msg.what === "sweep_started") s.setSweepRunning(true);
@@ -137,6 +137,9 @@ export function sendSpeed(ticks_per_sec: number) {
 }
 export function sendSpawn(x: number, y: number, radius = 5) {
   send({ type: "spawn", x, y, radius });
+}
+export function sendReleaseVirus(x: number, y: number, radius = 5) {
+  send({ type: "release_virus", x, y, radius });
 }
 export function sendFocus(x: number, y: number) {
   send({ type: "focus", x, y });

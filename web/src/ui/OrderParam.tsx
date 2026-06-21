@@ -34,12 +34,11 @@ export default function OrderParam() {
         ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
       }
 
-      const { series } = useStore.getState().stats;
-      for (let b = 0; b < series.length; b++) {
-        const data = series[b];
-        if (!data || data.length < 2) continue;
-        ctx.strokeStyle = BATCH_COLORS[b % BATCH_COLORS.length];
-        ctx.lineWidth = 2 * dpr;
+      const { series, infected } = useStore.getState().stats;
+      const drawLine = (data: number[] | undefined, color: string, lw: number) => {
+        if (!data || data.length < 2) return;
+        ctx.strokeStyle = color;
+        ctx.lineWidth = lw * dpr;
         ctx.beginPath();
         const n = data.length;
         for (let i = 0; i < n; i++) {
@@ -48,18 +47,21 @@ export default function OrderParam() {
           if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
         }
         ctx.stroke();
-        // current value dot
-        const last = data[n - 1];
-        ctx.fillStyle = BATCH_COLORS[b % BATCH_COLORS.length];
+        ctx.fillStyle = color;
         ctx.beginPath();
-        ctx.arc(W - 4, yFor(Math.min(1, last)), 4 * dpr, 0, Math.PI * 2);
+        ctx.arc(W - 4, yFor(Math.min(1, data[n - 1])), 4 * dpr, 0, Math.PI * 2);
         ctx.fill();
+      };
+      for (let b = 0; b < series.length; b++) {
+        // infected line (orange) under the tumor line
+        drawLine(infected[b], "#ff8b1f", 2);
+        drawLine(series[b], BATCH_COLORS[b % BATCH_COLORS.length], 2);
       }
 
       // labels
       ctx.fillStyle = "rgba(220,230,240,0.7)";
       ctx.font = `${11 * dpr}px ui-monospace, monospace`;
-      ctx.fillText("order parameter: tumor fraction", 8 * dpr, 16 * dpr);
+      ctx.fillText("tumor (pink) · infected (orange)", 8 * dpr, 16 * dpr);
       ctx.fillText("1.0", 8 * dpr, 12 * dpr + H * 0);
       raf = requestAnimationFrame(draw);
     };

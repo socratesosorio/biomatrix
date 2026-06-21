@@ -48,6 +48,7 @@ class SimState:
             "tick": self.engine.tick,
             "tumor_fraction": self.engine.tumor_fraction(),
             "necrotic_fraction": self.engine.necrotic_fraction(),
+            "infected_fraction": self.engine.infected_fraction(),
         })
 
     def hello(self) -> str:
@@ -104,6 +105,13 @@ class SimState:
             return False, None
         if t == "spawn":
             self.engine.spawn(
+                int(msg.get("x", self.grid // 2)),
+                int(msg.get("y", self.grid // 2)),
+                int(msg.get("radius", 4)),
+            )
+            return True, None
+        if t == "release_virus":
+            self.engine.release_virus(
                 int(msg.get("x", self.grid // 2)),
                 int(msg.get("y", self.grid // 2)),
                 int(msg.get("radius", 4)),
