@@ -27,12 +27,12 @@
 **SHOW:** Open on **Body** — human silhouette, glowing tumor site pulsing at the chest.
 
 **SAY:**
-> "This is a human body with a tumor. I'm going to dive into the living tissue — and everything you're about to see is a transformer, running live on an H100 right now. Not a video. Not a pre-render."
+> "This is a human body with a tumor. I'm going to dive into the living tissue. And everything you're about to see is a transformer, running live on an H100 right now. Not a video. Not a pre-render."
 
 **SHOW:** Click **Tissue**. Camera dives from the body into the live cellular grid.
 
 **SAY:**
-> "Here's the one idea this whole thing rests on. In real tissue, a cell decides what to do by weighing signals from its neighbors. That *is* attention — the exact same operation: a set of entities, each updating by weighted aggregation over its neighbors. Biology has been running attention for a billion years; we just recognized the shape and wrote the dynamics in it. So every timestep here is a transformer forward pass — which means this runs *native* on a transformer ASIC."
+> "Here's the one idea the whole thing rests on. In real tissue, a cell decides what to do by listening to its neighbors. That is attention. The exact same operation. A bunch of things, each one updating based on what's around it. Biology has been running attention for a billion years. We just noticed the shape, and wrote the rules in it. So every timestep here is one forward pass. Which means it runs natively on a transformer chip."
 
 ---
 
@@ -41,7 +41,7 @@
 **SHOW:** In **Tissue**, click **Play**, then **Bloom** preset. A tumor blooms; teal healthy tissue, magenta tumor, a dark necrotic core forming. Point to the chart bottom-left.
 
 **SAY:**
-> "Teal is healthy tissue, magenta is tumor. As the tumor packs in, it burns oxygen faster than the blood resupplies it, so the core goes hypoxic and dies — that brown center is necrosis. That dead-core, living-rim shape is how real tumors look, and it falls out of the physics, not a texture. And this line is the order parameter: the fraction of tissue that's cancer. One number that tells us which world we're in."
+> "Teal is healthy tissue. Magenta is tumor. As the tumor packs in, it burns oxygen faster than the blood can supply it. So the center starves and dies. That brown core is necrosis. A dead center, with a living rim. That's how real tumors actually look, and we didn't draw it. It comes straight out of the physics. And this line down here is the order parameter. It's just the fraction of the tissue that's cancer. One number that tells you which world you're in."
 
 ---
 
@@ -50,22 +50,22 @@
 **SHOW:** Click **Homeostasis** preset. Tissue settles to almost all teal; the order-parameter line drops toward zero.
 
 **SAY:**
-> "Right now aggression is low, immunity is high. The immune system plus contact inhibition hold the line — cancer can't get going. This is homeostasis."
+> "Right now aggression is low and immunity is high. The immune system holds the line, and cancer can't get going. This is homeostasis."
 
 **SHOW:** Grab **Aggression ★** and *slowly* drag right from ~0.20 toward ~0.40. Pause around 0.35.
 
 **SAY:**
-> "Now I turn up aggression — how hard tumor cells push to proliferate and invade. Nothing… nothing… and then —"
+> "Now I'll turn up aggression. That's how hard the tumor cells push to grow and invade. Nothing... still nothing... and then..."
 
 **SHOW:** Crossing ~0.35, the tissue flips to runaway magenta; the order-parameter line spikes.
 
 **SAY:**
-> "— there. A phase transition. A sharp critical threshold: below it the tumor goes extinct every time, above it it explodes every time. And I can drive it back —"
+> "There. That's a phase transition. A sharp tipping point. Below it, the tumor dies out every time. Above it, it explodes every time. And I can run it straight back."
 
 **SHOW:** Drag **Aggression** back below 0.30; the tumor is suppressed, the line falls.
 
 **SAY:**
-> "This isn't a pretty animation. It's a falsifiable model — a real critical point you can feel with your hand."
+> "This isn't a pretty animation. It's a real, testable model. An actual tipping point you can feel with your hand."
 
 ---
 
@@ -74,22 +74,22 @@
 **SHOW:** Click **Homeostasis** (calm canvas), then click **Release virus**. A bright-orange infection front blooms from center; behind it a grey dead core; the **orange line** on the chart climbs. *Optionally nudge the **Infectivity** slider up.*
 
 **SAY:**
-> "Now watch me drop a completely different agent into the *same* tissue — a virus. Healthy cells get exposed, turn infectious, shed virus to their neighbors, and die. Orange is infectious, grey is killed."
+> "Now watch me drop something completely different into the same tissue. A virus. Healthy cells get exposed. They turn infectious. They infect their neighbors, and then they die. Orange is infectious. Grey is dead."
 
 **SHOW:** Point at the pale-yellow ring just ahead of the orange front.
 
 **SAY:**
-> "And here's the point of the whole project. We didn't *discover* cancer, and we didn't discover viruses — the local rules are simple and known. The product is what they do that you cannot reason out by hand. Look: the virus's most dangerous property — this silent spread — comes from the latent period. Those cells are already infected but still look healthy. We never coded 'silent spread.' It's emergent. The bottleneck in biology was never knowing the local rules. It's the compute to explore what they imply."
+> "And here's the whole point of the project. We didn't discover cancer. We didn't discover viruses. The rules are simple, and we already know them. What's interesting is what they do together, and you cannot work that out in your head. Look at this. The most dangerous thing about the virus is the silent spread. See that pale yellow edge? Those cells are already infected, but they still look healthy. We never wrote 'silent spread.' It just emerges. Knowing the rules was never the hard part in biology. The hard part is the compute to explore what they lead to."
 
 **SHOW:** Gesture between the tumor and the virus.
 
 **SAY:** *(CLAIM #4 — the platform line)*
-> "And cancer and this virus run on the *same* engine — zero changes. Encode the substrate once, and the agents are swappable: a drug, a gene knockout, a second pathogen — the consequences come for free."
+> "And the cancer and the virus run on the same engine. Zero changes. You build the tissue once, and then the agents just swap in. A drug. A gene knockout. A second virus. The consequences come for free."
 
 **SHOW:** *(optional, ~15 s if you have the time)* Leave both agents running so the magenta tumor, the brown hypoxic necrosis, and the grey viral death overlap in the same region. Point at the muddied middle.
 
 **SAY:** *(the confounding insight — CLAIM #3, sharpened)*
-> "And watch what happens when they overlap. Now I've got two ways for a cell to die — the tumor starving it of oxygen, and the virus killing it — in the same patch of tissue. Just looking, you *cannot* tell which agent did what; the signatures mask each other. Stack a second pathogen on top and it's hopeless by eye. The only way to attribute cause is to run the counterfactuals — tumor alone, virus alone, both — and diff them. That's not a visualization problem you can squint your way out of; it's a *compute* problem. Disentangling interacting diseases is exactly the thing you can only do by running it, in parallel, many times."
+> "And watch what happens when they overlap. Now I've got two ways for a cell to die. The tumor starving it, and the virus killing it, in the same patch of tissue. Just by looking, you can't tell which one did it. They mask each other. Add a second virus and it's hopeless by eye. The only way to untangle it is to run the counterfactuals. Tumor alone. Virus alone. Both together. And then compare them. You can't squint your way out of this. It's a compute problem. Pulling apart diseases that interact is exactly the kind of thing you can only do by running it, in parallel, over and over."
 
 ---
 
@@ -98,7 +98,7 @@
 **SHOW:** Click **Cell** scene. Camera zooms into individual cells (big, gooey). Click one cell — cyan attention edges fan to its neighbors, yellow focused node, flowing dashes.
 
 **SAY:**
-> "Let me prove claim one isn't a metaphor. These glowing edges are the actual attention weights for this single cell — how much it's weighing each neighbor, this timestep. That's not 'like' attention. It *is* attention, computing 'what is my neighborhood.' Which is exactly why this entire simulation runs on the one primitive a transformer chip accelerates. On Etched's hardware a forward pass is nearly free — so a timestep is nearly free."
+> "Let me prove the attention thing isn't just a metaphor. These glowing edges are the real attention weights for this one cell. How much it's listening to each neighbor, right now, this step. This isn't 'like' attention. It is attention. It's computing 'what's around me.' And that's exactly why the whole simulation runs on the one thing a transformer chip is built to do. On Etched's hardware, a forward pass is almost free. So a timestep is almost free."
 
 ---
 
@@ -107,12 +107,12 @@
 **SHOW:** Click **Map** (or **Run phase sweep**). The viridis phase diagram appears — purple homeostasis, bright-yellow cancer, a clean diagonal critical boundary.
 
 **SAY:** *(CLAIM #2 — make the Etched founders feel seen)*
-> "And this is the part for the hardware people. A simulation has no gradients — it's pure inference, forever. So a chip built for inference throughput isn't a model server; it's a scientific instrument. This map is over two thousand separate tissues, every combination of aggression and immunity, run in parallel as *one* batched forward pass on the H100. That's what inference-time compute actually means — running the world forward, millions of times."
+> "Now this part is for the hardware people. A simulation has no training in it. No gradients. It's pure inference, forever. So a chip built for inference isn't just a model server. It's a scientific instrument. This map is over two thousand separate tissues. Every combination of aggression and immunity. All of them running at once, as one batched forward pass on the H100. That's what inference-time compute really means. Running the world forward, millions of times."
 
 **SHOW:** Switch on **Split seeds** (two tissues, identical params, near-critical). Let them diverge — one healthy, one cancer. Point at the two chart lines.
 
 **SAY:** *(CLAIM #6 — the rigorous reason for parallel compute)*
-> "And here's why you *need* that parallelism. Near the critical line, a single run lies. Same parameters, two seeds — one goes extinct, one explodes, and a tiny fluctuation decided it. So where it matters most, you can't trust one simulation. You need the ensemble — thousands of parallel runs to get the distribution. That's the scientific argument for near-infinite parallel compute."
+> "And here's why you actually need all that parallelism. Near the tipping point, a single run will lie to you. Same settings, two seeds. One dies out. One explodes. A tiny bit of luck decided it. So right where it matters most, you can't trust one run. You need the whole ensemble. Thousands of runs, to see the real distribution. That's the scientific reason for near-infinite parallel compute."
 
 ---
 
@@ -121,10 +121,10 @@
 **SHOW:** Click a pixel on the **Map** (if still up) or pull back to **Tissue**; let the hero tumor breathe.
 
 **SAY:** *(CLAIM #5 — the foundation-model trajectory)*
-> "Today I hand-set these rules — which makes them interpretable; I can point at the oxygen head, the crowding head. Newton handed Mujoco its physics. Biology won't hand us its interaction weights — so you learn them, from perturb-seq, CRISPR screens, microscopy. A transformer runs fast on the chip *and* is trainable from that data. A CUDA kernel does neither. More compute, simulate more, generate more data, learn a better engine — a foundation model of cell dynamics."
+> "Right now I set these rules by hand. And that's actually a good thing, because they're interpretable. I can point to the oxygen head, the crowding head. Newton handed Mujoco its physics. But biology won't hand us its rules that cleanly. So you learn them, from real data. Perturb-seq, CRISPR screens, microscopy. A transformer runs fast on the chip, and you can train it on that data. A plain GPU kernel can't do either. More compute, more simulation, more data, a better engine. That's a foundation model for how cells behave."
 
 **SAY:** *(the one line that lands it all — slow down here)*
-> "Cell signaling is attention, so simulating biology is running forward passes — which turns a transformer chip into an instrument for running the world forward, in parallel, to discover the things we can't predict by hand. Thanks."
+> "Cell signaling is attention. So simulating biology is just running forward passes. And that turns a transformer chip into an instrument for running the world forward, in parallel, to find the things we could never predict by hand. Thanks."
 
 *Hard cut on the phase map or the blooming tissue.*
 
